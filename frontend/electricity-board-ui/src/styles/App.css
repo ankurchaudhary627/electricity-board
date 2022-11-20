@@ -1,0 +1,46 @@
+.App {
+  text-align: center;
+  justify-content: center;
+  /* background-image: url('https://www.dsrmedias.com/sites/default/files/field/image/_105888743_mediaitem105888742_95.jpg'); */
+  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIXGRijE0M1htYOk03EAhvtYrfjZuWh2pEzw&usqp=CAU');
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.background {
+  filter: blur(4px);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.foreground {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header .title {
+  margin: 30px;
+}
+
+.applicant-details {
+  display: flex;
+  margin: 30px;
+  justify-content: center;
+}
+
+.connection-details {
+  display: flex;
+  margin: 30px;
+  justify-content: center;
+}
