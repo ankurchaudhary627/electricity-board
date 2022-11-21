@@ -1,6 +1,9 @@
-import { Table, Button } from 'antd'
+import { message, Table, Button, DatePicker } from 'antd'
 import { useState, useEffect } from 'react'
+import dayjs from 'dayjs'
 import ConnectionRequestEditForm from './ConnectionRequestEditForm'
+
+const { RangePicker } = DatePicker;
 
 const getDataToDisplay = (data) => {
   return data.map((connectionRecord, index) => {
@@ -22,9 +25,11 @@ const getDataToDisplay = (data) => {
 }
 
 const ConnectionApplicationRequests = (props) => {
-  const { data, applicantId, refetchData } = props
+  const { data, applicantId, refetchConnectionData } = props
   const [connectionData, setConnectionData] = useState([])
   const [loadModal, setLoadModal] = useState(false)
+  const [dateRange, setDateRange] = useState(null);
+  const [showFilter, setShowFilter] = useState(false);
 
   const columns = [
     {
@@ -89,9 +94,11 @@ const ConnectionApplicationRequests = (props) => {
     setLoadModal(true)
   }
 
-  const handleClose = (modalState) => {
+  const handleClose = (modalState, isDataUpdated) => {
     setLoadModal(modalState)
-    refetchData(applicantId)
+    if (isDataUpdated) {
+      refetchConnectionData(applicantId)
+    }
   }
 
   useEffect(() => {
@@ -102,17 +109,59 @@ const ConnectionApplicationRequests = (props) => {
     }
   }, [data])
 
+  const onChange = (val) => {
+    console.log(val);
+    if (val) {
+      setDateRange(val);
+      setShowFilter(true);
+    } else {
+      setDateRange(null);
+      setShowFilter(false)
+    }
+  }
+
+  const filterByDateRange = () => {
+    console.log('filterting data by range');
+    if (dateRange) {
+      console.log(connectionData);
+      const startDate = dateRange[0].format('YYYY-MM-DD');
+      const endDate = dateRange[1].format('YYYY-MM-DD');
+      const filteredData = connectionData.filter((data) => {
+        return data.applied_on >= startDate
+          && data.applied_on <= endDate;
+      });
+      if (filteredData.length) {
+        setConnectionData(filteredData);
+      } else {
+        message.error("No data present for given date range. Try again");
+      }
+    }
+  }
+
+  const disabledDate = (current) => {
+    // Can not select days after today
+    return current && current > dayjs().endOf('day')
+  }
+
   return (
-    <div>
-      <div>
-        <Table dataSource={connectionData} columns={columns} bordered size='medium' pagination={{ pageSize: 10 }} />
-        {
-          loadModal ?
-            <ConnectionRequestEditForm applicantId={applicantId} handleClose={handleClose} />
-            :
-            null
-        }
+    <div className='connection-details'>
+      <div className='date-range'>
+        <div>
+          <RangePicker onChange={onChange} disabledDate={disabledDate} />
+        </div>
+        <div>
+          <Button onClick={filterByDateRange} disabled={!showFilter}>
+            Filter
+          </Button>
+        </div>
       </div>
+      <Table dataSource={connectionData} columns={columns} bordered size='medium' pagination={{ pageSize: 10 }} />
+      {
+        loadModal ?
+          <ConnectionRequestEditForm applicantId={applicantId} handleClose={handleClose} />
+          :
+          null
+      }
     </div>
   )
 }

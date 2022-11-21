@@ -1,4 +1,4 @@
-import { Form, Input, Button, Modal, Select, DatePicker, InputNumber } from 'antd'
+import { message, Form, Input, Button, Modal, Select, DatePicker, InputNumber } from 'antd'
 import { useState } from 'react'
 import {
   BASE_URL,
@@ -23,7 +23,7 @@ const ConnectionRequestEditForm = (props) => {
   const handleCancel = () => {
     console.log('Clicked cancel button')
     setIsModalOpen(false)
-    handleClose(false)
+    handleClose(false, false)
   }
 
   const handleSubmit = (values) => {
@@ -52,11 +52,12 @@ const ConnectionRequestEditForm = (props) => {
       .then((data) => {
         console.log('updated connection data', data)
         setIsModalOpen(false)
-        handleClose(false)
+        handleClose(false, true)
         setConfirmLoading(false)
       })
       .catch((err) => {
         console.log('errors in updating connection details!')
+        message.error('Unable to update details.')
       })
   }
   const onFinishFailed = (errorInfo) => {

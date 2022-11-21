@@ -1,4 +1,4 @@
-import { Form, Input, Button, Modal, Select } from 'antd'
+import { message, Form, Input, Button, Modal, Select } from 'antd'
 import { useState, useEffect } from 'react'
 import {
   OWNERSHIP_MAPPING,
@@ -23,12 +23,12 @@ const ApplicantDetailsEditForm = (props) => {
   const handleCancel = () => {
     console.log('Clicked cancel button')
     setIsModalOpen(false)
-    handleClose(false)
+    handleClose(false, false)
   }
 
   const handleSubmit = (values) => {
     if (!values['pincode'] && !values['district'] && !values['ownership']) {
-      alert('Form cannot be blank!')
+      message.error('Form cannot be blank!')
       return
     }
     console.log('Success:', values)
@@ -48,11 +48,12 @@ const ApplicantDetailsEditForm = (props) => {
       .then((data) => {
         console.log('updated applicant data', data)
         setIsModalOpen(false)
-        handleClose(false)
+        handleClose(false, true)
         setConfirmLoading(false)
       })
       .catch((err) => {
         console.log('errors in updating applicant details!')
+        message.error('Unable to update details.')
       })
   }
   const onFinishFailed = (errorInfo) => {

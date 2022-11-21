@@ -43,4 +43,17 @@
   display: flex;
   margin: 30px;
   justify-content: center;
+  flex-direction: column;
+}
+
+.connection-details .date-range {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding: 5px;
+}
+
+.connection-details .date-range>div {
+  margin: 5px;
 }

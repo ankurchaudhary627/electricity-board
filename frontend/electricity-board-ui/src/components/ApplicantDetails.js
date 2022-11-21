@@ -14,9 +14,11 @@ const ApplicantDetails = (props) => {
     setLoadModal(true)
   }
 
-  const handleClose = (modalState) => {
+  const handleClose = (modalState, isDataUpdated) => {
     setLoadModal(modalState)
-    refetchData(applicantId)
+    if (isDataUpdated) {
+      refetchData(applicantId)
+    }
   }
 
   return (
